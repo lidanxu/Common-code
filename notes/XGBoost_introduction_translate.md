@@ -35,6 +35,7 @@ XGBoost用于有监督的问题，使用训练数据（包含很多特征）x<su
 其中L是训练误差，Ω是regularization term 正规化项。训练损失衡量我们的模型如何预测训练数据。 例如，常用的训练损失是均方误差squared error。
 
 ![squared error](https://github.com/lidanxu/Common-code/blob/master/images/squared_error.png)
+
 另一种常用的损失函数是逻辑回归的logistic loss：
 
 ![logistic loss](https://github.com/lidanxu/Common-code/blob/master/images/logistic_loss.png)
