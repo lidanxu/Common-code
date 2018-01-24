@@ -29,14 +29,18 @@ XGBoost用于有监督的问题，使用训练数据（包含很多特征）x<su
 关于目标函数的一个非常重要的事实是它必须总是包含两个部分：训练损失和基于对yi的不同理解，我们可能会遇到不同的问题，如回归，分类，排序等。我们需要找到一种方法来找到训练数据的最佳参数。 为了做到这一点，我们需要定义一个所谓的目标函数，以给定一组参数来衡量模型的性能。
 
 关于目标函数的一个非常重要的事实是它必须总是包含两个部分：训练损失和正规化。
+
 ![obj(θ)](https://github.com/lidanxu/Common-code/blob/master/images/objection_function.png)
 
 其中L是训练误差，Ω是regularization term 正规化项。训练损失衡量我们的模型如何预测训练数据。 例如，常用的训练损失是均方误差squared error。
+
 ![squared error](https://github.com/lidanxu/Common-code/blob/master/images/squared_error.png)
 另一种常用的损失函数是逻辑回归的logistic loss：
+
 ![logistic loss](https://github.com/lidanxu/Common-code/blob/master/images/logistic_loss.png)
 
 通常我们会忘记添加正规化项regularization term.regularization term控制模型的复杂度，从而避免过拟合。这听起来有些抽象，所以让我们在下面的图片中考虑下面的问题。假设你需要根据左上角的图片中的数据点拟合出一个阶梯函数，下面三种解决方案中那种最合适？ 
+
 ![User's interest](https://github.com/lidanxu/Common-code/blob/master/images/user_interest.png)
 
 正确的结果被标记为红色。请考虑对你而言视觉上这样拟合也是合理的。 一般原则是我们想要一个简单又预测能力强的模型。
@@ -105,6 +109,7 @@ MSE的形式form是友好的，具有一阶项（通常称为残差residual）�
 ![Additive Training 5](https://github.com/lidanxu/Common-code/blob/master/images/Additive_Training_5.png)
 
 当我们移除所有的约束，t步的目标函数是：
+
 ![Additive Training 6](https://github.com/lidanxu/Common-code/blob/master/images/Additive_Training_6.png)
 
 上式成为新tree的优化目标函数。 这个定义的一个重要优点是它只取决于g<sub>i</sub>和h<sub>i</sub>。 这就是xgboost支持自定义损失的功能。 我们可以使用完全相同的求解器，以g<sub>i</sub>和h<sub>i</sub>作为输入，来优化每个损失函数，包括逻辑回归logistic regression 和加权逻辑回归weighted logistic regression。
@@ -114,7 +119,9 @@ MSE的形式form是友好的，具有一阶项（通常称为残差residual）�
 ### Model Complexity
 
 我们已经介绍了训练过程，但是等等！还有一个重要的事情，regularization.我们需要定义树的复杂度Ω（f）
-。为了做到这一点，让我们首先提炼refine树f（x）的定义为 ![Model Complexity 1](https://github.com/lidanxu/Common-code/blob/master/images/Model_Complexity_1.png)
+。为了做到这一点，让我们首先提炼refine树f（x）的定义为 
+
+![Model Complexity 1](https://github.com/lidanxu/Common-code/blob/master/images/Model_Complexity_1.png)
 
 上式中w是叶节点的分数的矢量，q是一个函数将每个数据点分配给相应的叶节点。T是叶节点的数量。 在XGBoost中，我们将复杂度定义为
 
@@ -134,6 +141,7 @@ MSE的形式form是友好的，具有一阶项（通常称为残差residual）�
  ![Structure Score 2](https://github.com/lidanxu/Common-code/blob/master/images/Structure_Score_2.png)
  
  在上式方程中，w<sub>j</sub>是相互独立的，方程中G<sub>j</sub>w<sub>j</sub> + 1/2*(H<sub>j</sub>+λ)w<sub>j</sub><sup>2</sup>是一个给定结构q(x)的二次型和最佳的w<sub>j</sub>，我们可以得到最佳的目标减少是：
+
  ![Structure Score 3](https://github.com/lidanxu/Common-code/blob/master/images/Structure_Score_3.png)
  
  上图中最后一个等式衡量树结构q(x)到底有多好。
